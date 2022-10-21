@@ -3,17 +3,7 @@ import firebase from 'firebase/compat/app'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
 import './sign-in.css'
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCxxrn9A7E1arCCCXxKAAEiip3dRt_1wag",
-    authDomain: "aimbox-c54d0.firebaseapp.com",
-    projectId: "aimbox-c54d0",
-    storageBucket: "aimbox-c54d0.appspot.com",
-    messagingSenderId: "725744630197",
-    appId: "1:725744630197:web:824544a5ea34329c1a81fc",
-    measurementId: "G-J5K29S76G8"
-}
-firebase.initializeApp(firebaseConfig)
+import { postUser } from '../api'
 
 const uiConfig = {
     signInFlow: 'popup',
@@ -24,16 +14,6 @@ const uiConfig = {
     callbacks: {
         signInSuccessWithAuthResult: () => false,
     },
-}
-
-const postUser = async () => {
-    const token = await firebase.auth().currentUser.getIdToken()
-    fetch('http://localhost:5000/api/user', {
-        method: 'POST',
-        headers: {
-            'authtoken': token,
-        },
-    })
 }
 
 const SignInComponent = ({ userSignedIn, setUserSignedIn }) => {

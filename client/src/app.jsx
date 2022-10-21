@@ -1,23 +1,37 @@
 import React, { useState } from 'react'
-import SignInComponent from './components/sign-in'
+import ScenariosComponent from './components/scenarios'
 import SettingsComponent from './components/settings'
+import SignInComponent from './components/sign-in'
 
 const App = () => {
     const [userSignedIn, setUserSignedIn] = useState(false)
-    const [showSettings, setShowSettings] = useState(false)
+    const [selectedPage, setSelectedPage] = useState('scenarios')
 
-    const toggleSettings = () => { setShowSettings(!showSettings) }
+    const onScenarios = () => { setSelectedPage('scenarios') }
+    const onSettings = () => { setSelectedPage('settings') }
+
+    const page = {
+        'scenarios': <ScenariosComponent />,
+        'settings': userSignedIn ? <SettingsComponent /> : null
+    }
 
     return (
         <header>
             <nav>
                 <a href="/"><h1>AimBox</h1></a>
                 <ul>
-                    {userSignedIn ? <li><a onClick={toggleSettings}>Settings</a></li> : null}
-                    <SignInComponent userSignedIn={userSignedIn} setUserSignedIn={setUserSignedIn} />
+                    <li><a href="#" onClick={onScenarios}>Scenarios</a></li>
+
+                    {userSignedIn ? <li><a href="#" onClick={onSettings}>Settings</a></li> : null}
+
+                    <SignInComponent
+                        userSignedIn={userSignedIn}
+                        setUserSignedIn={setUserSignedIn}
+                    />
                 </ul>
             </nav>
-            {(userSignedIn && showSettings) ? <SettingsComponent /> : null}
+
+            {page[selectedPage]}
         </header>
     )
 }
