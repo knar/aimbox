@@ -1,37 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { getScenarios } from '../api'
+import React, { useState } from 'react'
+import ScenarioPicker from './scenario-picker'
+import Game from './game'
 
-const ScenariosComponent = () => {
-    const scens = useScens()
+const Scenarios = () => {
+    const [pickedScen, setPickedScen] = useState()
 
-    const scenCards = scens.map(scen =>
-        <aside key={scen._id}>
-            <h3>{scen.name}</h3>
-            <p>{scen.desc}</p>
-        </aside>
-    )
+    const exitGame = () => {
+        setPickedScen(undefined)
+    }
 
     return (
-        <section>
-            <header>
-                <h2>Scenarios</h2>
-                <p>Choose one of the scenarios below!</p>
-            </header>
-            {scenCards}
-        </section>
+        <>
+            {pickedScen
+                ? <Game scen={pickedScen} exitGame={exitGame} />
+                : <ScenarioPicker setPickedScen={setPickedScen}></ScenarioPicker>
+            }
+        </>
     )
 }
 
-const useScens = () => {
-    const [scens, setScens] = useState([])
-
-    useEffect(() => {
-        (async () => {
-            setScens(await getScenarios())
-        })()
-    }, [])
-
-    return scens
-}
-
-export default ScenariosComponent
+export default Scenarios
