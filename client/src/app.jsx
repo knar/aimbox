@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import ScenariosComponent from './components/scenarios'
-import SettingsComponent from './components/settings'
-import SignInComponent from './components/sign-in'
+import Scenarios from './components/scenarios'
+import Settings from './components/settings'
+import SignIn from './components/sign-in'
 
 const App = () => {
     const [userSignedIn, setUserSignedIn] = useState(false)
@@ -11,8 +11,8 @@ const App = () => {
     const onSettings = () => { setSelectedPage('settings') }
 
     const page = {
-        'scenarios': <ScenariosComponent />,
-        'settings': userSignedIn ? <SettingsComponent /> : null
+        'scenarios': <Scenarios />,
+        'settings': userSignedIn ? <Settings /> : null
     }
 
     return (
@@ -24,7 +24,7 @@ const App = () => {
 
                     {userSignedIn ? <li><a href="#" onClick={onSettings}>Settings</a></li> : null}
 
-                    <SignInComponent
+                    <SignIn
                         userSignedIn={userSignedIn}
                         setUserSignedIn={setUserSignedIn}
                     />

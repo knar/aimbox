@@ -16,7 +16,7 @@ const uiConfig = {
     },
 }
 
-const SignInComponent = ({ userSignedIn, setUserSignedIn }) => {
+const SignIn = ({ userSignedIn, setUserSignedIn }) => {
     const widgetRef = useRef(null);
 
     useEffect(() => {
@@ -64,4 +64,4 @@ const SignInComponent = ({ userSignedIn, setUserSignedIn }) => {
     }
 }
 
-export default SignInComponent
+export default SignIn
