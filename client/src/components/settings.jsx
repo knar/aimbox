@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getSettings, postSettings } from '../api'
 
-const SettingsComponent = () => {
+const Settings = () => {
     const [settings, setSettings] = useSettings()
+
+    const handleSensChange = event => {
+        setSettings({ ...settings, sens: event.target.value })
+    }
+
+    const handleFovChange = event => {
+        setSettings({ ...settings, fov: event.target.value })
+    }
+
+    const handleSave = () => { postSettings(settings) }
 
     return (
         <section>
@@ -17,7 +27,7 @@ const SettingsComponent = () => {
                     max="5"
                     step="0.1"
                     value={settings.sens}
-                    onChange={e => setSettings({ sens: e.target.value, ...settings })}
+                    onChange={handleSensChange}
                 />
                 <label>Field of View: {settings.fov}</label>
                 <input
@@ -26,11 +36,11 @@ const SettingsComponent = () => {
                     max="130"
                     step="1"
                     value={settings.fov}
-                    onChange={e => setSettings({ fov: e.target.value, ...settings })}
+                    onChange={handleFovChange}
                 />
-                <button type="button" onClick={() => postSettings(settings)}>Save</button>
+                <button type="button" onClick={handleSave}>Save</button>
             </form>
-        </section>
+        </section >
     )
 }
 
@@ -46,4 +56,4 @@ const useSettings = () => {
     return [settings, setSettings]
 }
 
-export default SettingsComponent
+export default Settings
