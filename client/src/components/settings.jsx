@@ -12,6 +12,10 @@ const Settings = () => {
         setSettings({ ...settings, fov: event.target.value })
     }
 
+    const handleWallColorChange = event => {
+        setSettings({ ...settings, wallColor: event.target.value })
+    }
+
     const handleSave = () => { postSettings(settings) }
 
     return (
@@ -38,6 +42,12 @@ const Settings = () => {
                     value={settings.fov}
                     onChange={handleFovChange}
                 />
+                <label>Wall Color: {settings.wallColor}</label>
+                <input
+                    type="color"
+                    value={settings.wallColor}
+                    onChange={handleWallColorChange}
+                />
                 <button type="button" onClick={handleSave}>Save</button>
             </form>
         </section >
@@ -48,7 +58,7 @@ const useSettings = () => {
     const [settings, setSettings] = useState({
         sens: 1,
         fov: 103,
-        wallColor: 'rgb(128, 128, 128)'
+        wallColor: '#808080'
     })
 
     useEffect(() => {
