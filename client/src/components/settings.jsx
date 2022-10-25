@@ -45,11 +45,15 @@ const Settings = () => {
 }
 
 const useSettings = () => {
-    const [settings, setSettings] = useState({ sens: 1, fov: 103 })
+    const [settings, setSettings] = useState({
+        sens: 1,
+        fov: 103,
+        wallColor: 'rgb(128, 128, 128)'
+    })
 
     useEffect(() => {
         (async () => {
-            setSettings(await getSettings())
+            setSettings({ ...settings, ...(await getSettings()) })
         })()
     }, [])
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ScenarioPicker from './scenario-picker'
-import Game from './game'
+import GameWrapper from './game-wrapper'
 
 const Scenarios = () => {
     const [pickedScen, setPickedScen] = useState()
@@ -12,7 +12,7 @@ const Scenarios = () => {
     return (
         <>
             {pickedScen
-                ? <Game scen={pickedScen} exitGame={exitGame} />
+                ? <GameWrapper scenario={pickedScen} exitGame={exitGame} />
                 : <ScenarioPicker setPickedScen={setPickedScen}></ScenarioPicker>
             }
         </>
