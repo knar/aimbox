@@ -6,7 +6,8 @@ import {
     Mesh,
     MeshStandardMaterial,
     PointLight,
-    Scene
+    Scene,
+    SphereGeometry
 } from 'three'
 
 export const createScene = (scen, settings) => {
@@ -32,4 +33,16 @@ export const createScene = (scen, settings) => {
     scene.add(pointLight)
 
     return scene
+}
+
+export const createBotMesh = (pos, radius, color) => {
+    const geo = new SphereGeometry(radius)
+    const mat = new MeshStandardMaterial({
+        color: color,
+        roughness: 0.9
+    })
+    const mesh = new Mesh(geo, mat)
+    mesh.position.set(pos.x, pos.y, pos.z)
+
+    return mesh
 }

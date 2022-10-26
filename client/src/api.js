@@ -1,13 +1,8 @@
 import firebase from 'firebase/compat/app'
 
-export const postUser = async () => {
-    const token = await firebase.auth().currentUser.getIdToken()
-    fetch('http://localhost:5000/api/user', {
-        method: 'POST',
-        headers: {
-            'authtoken': token,
-        },
-    })
+export const getScenarios = async () => {
+    const res = await fetch('http://localhost:5000/api/scenarios')
+    return await res.json()
 }
 
 export const getSettings = async () => {
@@ -36,9 +31,14 @@ export const postSettings = async (settings) => {
     })
 }
 
-export const getScenarios = async () => {
-    const res = await fetch('http://localhost:5000/api/scenarios')
-    return await res.json()
+export const postUser = async () => {
+    const token = await firebase.auth().currentUser.getIdToken()
+    fetch('http://localhost:5000/api/user', {
+        method: 'POST',
+        headers: {
+            'authtoken': token,
+        },
+    })
 }
 
 firebase.initializeApp({

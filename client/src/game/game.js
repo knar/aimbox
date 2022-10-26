@@ -1,11 +1,12 @@
-import { Euler, PerspectiveCamera, WebGLRenderer } from 'three'
+import { Euler, PerspectiveCamera, Raycaster, WebGLRenderer } from 'three'
 import { getSettings } from '../api'
-import { createScene } from './scene'
-import { clamp, halfpi, scaleFov } from './util'
+import { drawCrosshair } from './hud'
+import { createBotMesh, createScene } from './scene'
+import Sound from './sound'
+import { clamp, halfpi, randInt, scaleFov } from './util'
 
 export default class Game {
     #frameId
-    #endTime
     #scenario
     #exitGame
     #canvas
@@ -13,7 +14,8 @@ export default class Game {
     #settings
     #state
     #renderer
-    #prevTime
+    #raycaster
+    #hitSound
 
     constructor({ scenario, exitGame, canvas, hudCanvas }) {
         this.#scenario = scenario
@@ -27,40 +29,92 @@ export default class Game {
         this.#state = {
             camera: new PerspectiveCamera(),
             scene: createScene(this.#scenario, this.#settings),
+            bots: [],
             isPointerLocked: false,
+            stats: {}
         }
         this.#renderer = new WebGLRenderer({
             canvas: this.#canvas,
             antialias: false,
         })
+        this.#raycaster = new Raycaster()
+        this.#hitSound = new Sound('./sounds/perc-808.ogg')
 
         this.#onWindowResize()
         this.#registerEventListeners()
     }
 
     start() {
-        this.#endTime = performance.now() + this.#scenario.duration * 1000
         this.#state.camera.position.setX(this.#scenario.spawn.x)
         this.#state.camera.position.setY(this.#scenario.spawn.y)
         this.#state.camera.position.setZ(this.#scenario.spawn.z)
+
+        this.#state.stats = {
+            hits: 0,
+            misses: 0,
+        }
+
+        this.#clearBots()
+        this.#fillBots()
+
+        this.#state.endTime = performance.now() + this.#scenario.duration * 1000
         this.#startLoop()
+
+        drawCrosshair(this.#hudCanvas, this.#settings.crosshair)
     }
 
     #loop() {
         this.#frameId = null
         this.#startLoop()
 
-        const now = performance.now()
-        if (now > this.#endTime) {
+        if (performance.now() > this.#state.endTime) {
             this.#stopLoop()
             console.log("Game ended...")
         }
 
-        // const dt = now - this.#prevTime
-        // TODO: use dt to update bot movements
-
-        this.#prevTime = now
         this.#renderer.render(this.#state.scene, this.#state.camera)
+    }
+
+    #shoot() {
+        this.#raycaster.setFromCamera({ x: 0, y: 0 }, this.#state.camera)
+        const intersects = this.#raycaster.intersectObjects(this.#state.bots, false)
+        if (intersects.length > 0) {
+            this.#removeBot(intersects[0].object)
+            this.#addBot()
+            this.#state.stats.hits++
+            this.#hitSound.playSound(0, 0.01)
+        } else {
+            this.#state.stats.misses++
+        }
+    }
+
+    #fillBots() {
+        while (this.#state.bots.length < this.#scenario.botCount) {
+            this.#addBot()
+        }
+    }
+
+    #addBot() {
+        const x = randInt(this.#scenario.botSpawn.x[0], this.#scenario.botSpawn.x[1])
+        const y = randInt(this.#scenario.botSpawn.y[0], this.#scenario.botSpawn.y[1])
+        const z = randInt(this.#scenario.botSpawn.z[0], this.#scenario.botSpawn.z[1])
+
+        const mesh = createBotMesh({ x, y, z }, this.#scenario.botRadius, this.#settings.botColor)
+        this.#state.bots.push(mesh)
+        this.#state.scene.add(mesh)
+    }
+
+    #clearBots() {
+        for (let i = 0; i < this.#state.bots.length; i++) {
+            this.#state.scene.children.splice(
+                this.#state.scene.children.indexOf(this.#state.bots[i]), 1)
+        }
+        this.#state.bots = []
+    }
+
+    #removeBot(bot) {
+        this.#state.scene.children.splice(this.#state.scene.children.indexOf(bot), 1)
+        this.#state.bots.splice(this.#state.bots.indexOf(bot), 1)
     }
 
     #startLoop() {
@@ -73,8 +127,8 @@ export default class Game {
         if (this.#frameId) {
             cancelAnimationFrame(this.#frameId)
             this.#frameId = undefined
+            document.exitPointerLock()
         }
-        // TODO: exit pointer lock as well?
     }
 
     #registerEventListeners() {
@@ -92,27 +146,33 @@ export default class Game {
                 this.start()
                 return
             }
+
+            this.#shoot()
         }
     }
 
     #onMouseMove(e) {
-        const sens = this.#settings.sens * 0.001
-        const euler = new Euler(0, 0, 0, 'YXZ')
-        euler.setFromQuaternion(this.#state.camera.quaternion)
-        euler.y -= e.movementX * sens
-        euler.x -= e.movementY * sens
-        euler.x = clamp(euler.x, -halfpi, halfpi)
-        this.#state.camera.quaternion.setFromEuler(euler)
+        if (this.#state.isPointerLocked) {
+            const sens = this.#settings.sens * 0.001
+            const euler = new Euler(0, 0, 0, 'YXZ')
+            euler.setFromQuaternion(this.#state.camera.quaternion)
+            euler.y -= e.movementX * sens
+            euler.x -= e.movementY * sens
+            euler.x = clamp(euler.x, -halfpi, halfpi)
+            this.#state.camera.quaternion.setFromEuler(euler)
+        }
     }
 
     #onKeyDown(e) {
         if (e.code === 'Escape') {
             this.#exitGame()
+        } else if (e.code === 'KeyR') {
+            this.start()
         }
     }
 
     #onPointerLockChange() {
-        this.#state.isPointerLocked = (document.pointerLockElement === this.hudCanvas)
+        this.#state.isPointerLocked = (document.pointerLockElement === this.#hudCanvas)
     }
 
     #onWindowResize() {
