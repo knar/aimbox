@@ -1,3 +1,11 @@
+export const drawStats = (canvas, stats) => {
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(10, 10, 400, 30)
+    ctx.font = '30px mono'
+    ctx.textBaseline = 'top'
+    ctx.fillText(`Hits: ${stats.hits}   Misses: ${stats.misses}`, 10, 10, 400)
+}
+
 export const drawCrosshair = (canvas, opts) => {
     const ctx = canvas.getContext('2d')
     const x = Math.round(canvas.width / 2)

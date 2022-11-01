@@ -1,27 +1,27 @@
 import { Euler, PerspectiveCamera, Raycaster, WebGLRenderer } from 'three'
 import { getSettings } from '../api'
-import { drawCrosshair } from './hud'
+import { drawCrosshair, drawStats } from './hud'
 import { createBotMesh, createScene } from './scene'
 import Sound from './sound'
 import { clamp, halfpi, randInt, scaleFov } from './util'
 
 export default class Game {
-    #frameId
     #scenario
-    #exitGame
     #canvas
     #hudCanvas
+    #fin
     #settings
     #state
-    #renderer
     #raycaster
     #hitSound
+    #renderer
+    #frameId
 
-    constructor({ scenario, exitGame, canvas, hudCanvas }) {
+    constructor({ scenario, canvas, hudCanvas, fin }) {
         this.#scenario = scenario
-        this.#exitGame = exitGame
         this.#canvas = canvas
         this.#hudCanvas = hudCanvas
+        this.#fin = fin
     }
 
     async init() {
@@ -33,21 +33,24 @@ export default class Game {
             isPointerLocked: false,
             stats: {}
         }
+        this.#state.camera.position.setX(this.#scenario.spawn.x)
+        this.#state.camera.position.setY(this.#scenario.spawn.y)
+        this.#state.camera.position.setZ(this.#scenario.spawn.z)
+        this.#raycaster = new Raycaster()
+        this.#hitSound = new Sound('./sounds/perc-808.ogg')
         this.#renderer = new WebGLRenderer({
             canvas: this.#canvas,
             antialias: false,
         })
-        this.#raycaster = new Raycaster()
-        this.#hitSound = new Sound('./sounds/perc-808.ogg')
 
-        this.#onWindowResize()
         this.#registerEventListeners()
+        this.#onWindowResize()
     }
 
     start() {
-        this.#state.camera.position.setX(this.#scenario.spawn.x)
-        this.#state.camera.position.setY(this.#scenario.spawn.y)
-        this.#state.camera.position.setZ(this.#scenario.spawn.z)
+        if (!this.#state.isPointerLocked) {
+            this.#hudCanvas.requestPointerLock()
+        }
 
         this.#state.stats = {
             hits: 0,
@@ -57,7 +60,7 @@ export default class Game {
         this.#clearBots()
         this.#fillBots()
 
-        this.#state.endTime = performance.now() + this.#scenario.duration * 1000
+        this.#state.finTime = performance.now() + this.#scenario.duration * 1000
         this.#startLoop()
 
         drawCrosshair(this.#hudCanvas, this.#settings.crosshair)
@@ -67,9 +70,16 @@ export default class Game {
         this.#frameId = null
         this.#startLoop()
 
-        if (performance.now() > this.#state.endTime) {
+        const now = performance.now()
+        if (now > this.#state.finTime) {
             this.#stopLoop()
-            console.log("Game ended...")
+            this.#fin(this.#state.stats)
+            return
+        }
+
+        if (!this.#state.prevStatsDrawTime || now > this.#state.prevStatsDrawTime + 100) {
+            drawStats(this.#hudCanvas, this.#state.stats)
+            this.#state.prevStatsDrawTime = now
         }
 
         this.#renderer.render(this.#state.scene, this.#state.camera)
@@ -141,13 +151,9 @@ export default class Game {
 
     #onMouseDown(e) {
         if (e.button === 0) {
-            if (!this.#state.isPointerLocked) {
-                this.#hudCanvas.requestPointerLock()
-                this.start()
-                return
+            if (this.#state.isPointerLocked) {
+                this.#shoot()
             }
-
-            this.#shoot()
         }
     }
 
@@ -164,10 +170,13 @@ export default class Game {
     }
 
     #onKeyDown(e) {
-        if (e.code === 'Escape') {
-            this.#exitGame()
-        } else if (e.code === 'KeyR') {
-            this.start()
+        if (e.code === 'KeyR') {
+            if (this.#state.finTime > performance.now()) {
+                if (!this.#state.isPointerLocked) {
+                    this.#hudCanvas.requestPointerLock()
+                }
+                this.start()
+            }
         }
     }
 
@@ -189,5 +198,7 @@ export default class Game {
             this.#state.camera.fov = scaleFov(this.#settings.fov, height / width)
             this.#state.camera.updateProjectionMatrix()
         }
+
+        this.#renderer.render(this.#state.scene, this.#state.camera)
     }
 }

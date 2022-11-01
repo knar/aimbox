@@ -1,5 +1,6 @@
 .three-canvas,
-.hud-canvas {
+.hud-canvas,
+.popup {
     position: absolute;
     top: 0;
     left: 0;
@@ -13,4 +14,15 @@
 
 .hud-canvas {
     z-index: 2;
+}
+
+.popup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+}
+
+.popup aside {
+    background-color: white;
 }
