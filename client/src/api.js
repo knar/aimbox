@@ -19,6 +19,18 @@ export const getSettings = async () => {
     return await res.json()
 }
 
+export const postRun = async (run) => {
+    const token = await firebase.auth().currentUser.getIdToken()
+    fetch('http://localhost:5000/api/runs', {
+        method: 'POST',
+        headers: {
+            'authtoken': token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(run),
+    })
+}
+
 export const postSettings = async (settings) => {
     const token = await firebase.auth().currentUser.getIdToken()
     fetch('http://localhost:5000/api/settings', {

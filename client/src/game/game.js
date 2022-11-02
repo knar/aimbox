@@ -4,6 +4,7 @@ import { drawCrosshair, drawStats } from './hud'
 import { createBotMesh, createScene } from './scene'
 import Sound from './sound'
 import { clamp, halfpi, randInt, scaleFov } from './util'
+import { postRun } from '../api'
 
 export default class Game {
     #scenario
@@ -72,8 +73,17 @@ export default class Game {
 
         const now = performance.now()
         if (now > this.#state.finTime) {
+            drawStats(this.#hudCanvas, this.#state.stats)
             this.#stopLoop()
+
             this.#fin(this.#state.stats)
+
+            postRun({
+                scenId: this.#scenario._id,
+                finTime: Date.now(),
+                stats: this.#state.stats,
+            })
+
             return
         }
 

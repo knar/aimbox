@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Scenarios from './components/scenarios'
+import Runs from './components/runs'
 import Settings from './components/settings'
 import SignIn from './components/sign-in'
 
@@ -8,11 +9,13 @@ const App = () => {
     const [selectedPage, setSelectedPage] = useState('scenarios')
 
     const onScenarios = () => { setSelectedPage('scenarios') }
+    const onRuns = () => { setSelectedPage('runs') }
     const onSettings = () => { setSelectedPage('settings') }
 
     const page = {
-        'scenarios': <Scenarios />,
-        'settings': userSignedIn ? <Settings /> : null
+        'scenarios': userSignedIn ? <Scenarios /> : null,
+        'runs': <Runs />,
+        'settings': userSignedIn ? <Settings /> : null,
     }
 
     return (
@@ -20,10 +23,9 @@ const App = () => {
             <nav>
                 <a href="/"><h1>AimBox</h1></a>
                 <ul>
-                    <li><a href="#" onClick={onScenarios}>Scenarios</a></li>
-
+                    {userSignedIn ? <li><a href="#" onClick={onScenarios}>Scenarios</a></li> : null}
+                    <li><a href="#" onClick={onRuns}>Runs</a></li>
                     {userSignedIn ? <li><a href="#" onClick={onSettings}>Settings</a></li> : null}
-
                     <SignIn
                         userSignedIn={userSignedIn}
                         setUserSignedIn={setUserSignedIn}
