@@ -187,6 +187,11 @@ export default class Game {
                 }
                 this.start()
             }
+        } else if (e.code === 'Escape') {
+            if (!this.#state.isPointerLocked) {
+                this.#stopLoop()
+                this.#fin(this.#state.stats)
+            }
         }
     }
 
@@ -209,6 +214,7 @@ export default class Game {
             this.#state.camera.updateProjectionMatrix()
         }
 
+        drawCrosshair(this.#hudCanvas, this.#settings.crosshair)
         this.#renderer.render(this.#state.scene, this.#state.camera)
     }
 }

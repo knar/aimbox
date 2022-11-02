@@ -13,15 +13,13 @@ const ScenarioPicker = ({ setPickedScen }) => {
     )
 
     return (
-        <>
-            <section>
-                <header>
-                    <h2>Scenarios</h2>
-                    <p>Choose one of the scenarios below!</p>
-                </header>
-                {scenCards}
-            </section>
-        </>
+        <section>
+            <header>
+                <h2>Scenarios</h2>
+                <p>Choose one of the scenarios below!</p>
+            </header>
+            {scenCards}
+        </section>
     )
 }
 
