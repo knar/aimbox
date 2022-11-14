@@ -1,10 +1,9 @@
 import { Euler, PerspectiveCamera, Raycaster, WebGLRenderer } from 'three'
-import { getSettings } from '../api'
+import { getSettings, postRun } from '../api'
 import { drawCrosshair, drawStats } from './hud'
 import { createBotMesh, createScene } from './scene'
 import Sound from './sound'
 import { clamp, halfpi, randInt, scaleFov } from './util'
-import { postRun } from '../api'
 
 export default class Game {
     #scenario
