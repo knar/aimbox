@@ -14,7 +14,7 @@ const App = () => {
 
     const page = {
         'scenarios': userSignedIn ? <Scenarios /> : null,
-        'runs': <Runs />,
+        'runs': userSignedIn ? <Runs /> : null,
         'settings': userSignedIn ? <Settings /> : null,
     }
 
@@ -24,7 +24,7 @@ const App = () => {
                 <a href="/"><h1>AimBox</h1></a>
                 <ul>
                     {userSignedIn ? <li><a href="#" onClick={onScenarios}>Scenarios</a></li> : null}
-                    <li><a href="#" onClick={onRuns}>Runs</a></li>
+                    {userSignedIn ? <li><a href="#" onClick={onRuns}>Runs</a></li> : null}
                     {userSignedIn ? <li><a href="#" onClick={onSettings}>Settings</a></li> : null}
                     <SignIn
                         userSignedIn={userSignedIn}
