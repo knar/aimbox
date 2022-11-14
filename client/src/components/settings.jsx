@@ -97,6 +97,13 @@ const Settings = () => {
                     onChange={e => setSettings({ ...settings, crosshair: { ...settings.crosshair, outlineColor: e.target.value } })}
                 />
 
+                <label>Display Name:</label>
+                <input
+                    type="text"
+                    value={settings.displayName}
+                    onChange={e => setSettings({ ...settings, displayName: e.target.value })}
+                />
+
                 <button type="button" onClick={handleSave}>Save</button>
             </form>
         </section >
@@ -116,7 +123,8 @@ const useSettings = () => {
             outlineWidth: 1,
             color: '#ffe600',
             outlineColor: '#000000',
-        }
+        },
+        displayName: 'Anon',
     })
 
     useEffect(() => {
