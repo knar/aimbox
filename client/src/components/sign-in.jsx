@@ -50,8 +50,7 @@ const SignIn = ({ userSignedIn, setUserSignedIn }) => {
     if (userSignedIn) {
         return (
             <li>
-                <a href="#">{firebase.auth().currentUser.displayName}</a>
-                <ul><li><a onClick={() => firebase.auth().signOut()}>Sign Out</a></li></ul>
+                <a onClick={() => firebase.auth().signOut()}>Sign Out</a>
             </li>
         )
     } else {
