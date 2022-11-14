@@ -6,15 +6,15 @@ const Runs = () => {
     useEffect(() => {
         (async () => {
             const runs = await getRuns()
-            runs.sort((a, b) => a.stats.hits < b.stats.hits)
+            runs.sort((a, b) => a.finTime < b.finTime)
             setRuns(runs)
         })()
     }, [])
 
     const runsList = runs.map((run, i) =>
         <tr key={i}>
-            <td>#{i + 1}</td>
-            <td>{run.uid}</td>
+            <td>{run.scenarioName}</td>
+            <td>{run.displayName}</td>
             <td>{run.stats.hits}</td>
             <td>{run.stats.misses}</td>
             <td>{(new Date(run.finTime)).toLocaleDateString()}</td>
@@ -28,14 +28,16 @@ const Runs = () => {
                 <table>
                     <thead>
                         <tr>
-                            <td>Rank</td>
-                            <td>Player</td>
+                            <td>Scenario</td>
+                            <td>User</td>
                             <td>Hits</td>
                             <td>Misses</td>
                             <td>Date</td>
                         </tr>
                     </thead>
-                    {runsList}
+                    <tbody>
+                        {runsList}
+                    </tbody>
                 </table>
             </header>
         </section>
