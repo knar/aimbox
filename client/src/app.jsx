@@ -14,7 +14,7 @@ const App = () => {
 
     const page = {
         'scenarios': userSignedIn ? <Scenarios /> : null,
-        'runs': userSignedIn ? <Runs /> : null,
+        'runs': userSignedIn ? <Runs title='Your Past Runs' /> : null,
         'settings': userSignedIn ? <SettingsForm /> : null,
     }
 

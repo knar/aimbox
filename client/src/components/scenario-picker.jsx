@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getScenarios } from "../api"
 
-const ScenarioPicker = ({ setPickedScen }) => {
+const ScenarioPicker = ({ setPickedScen, setLeaderboardScen }) => {
     const scens = useScens()
 
     const scenCards = scens.map(scen =>
@@ -9,6 +9,7 @@ const ScenarioPicker = ({ setPickedScen }) => {
             <h3>{scen.name}</h3>
             <p>{scen.desc}</p>
             <button type="button" onClick={() => setPickedScen(scen)}>Play</button>
+            <button type="button" onClick={() => setLeaderboardScen(scen)}>Leaderboard</button>
         </aside>
     )
 

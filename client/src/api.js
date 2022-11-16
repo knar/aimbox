@@ -1,13 +1,15 @@
 import firebase from 'firebase/compat/app'
 
+const url = 'http://localhost:5000/api/'
+
 export const getScenarios = async () => {
-    const res = await fetch('http://localhost:5000/api/scenarios')
+    const res = await fetch(url + 'scenarios')
     return await res.json()
 }
 
 export const getSettings = async () => {
     const token = await firebase.auth().currentUser.getIdToken()
-    const res = await fetch('http://localhost:5000/api/settings', {
+    const res = await fetch(url + 'settings', {
         headers: { 'authtoken': token },
     })
 
@@ -21,7 +23,7 @@ export const getSettings = async () => {
 
 export const postSettings = async (settings) => {
     const token = await firebase.auth().currentUser.getIdToken()
-    fetch('http://localhost:5000/api/settings', {
+    fetch(url + 'settings', {
         method: 'POST',
         headers: {
             'authtoken': token,
@@ -31,14 +33,17 @@ export const postSettings = async (settings) => {
     })
 }
 
-export const getRuns = async () => {
-    const res = await fetch('http://localhost:5000/api/runs')
+export const getRuns = async (params = '') => {
+    const token = await firebase.auth().currentUser.getIdToken()
+    const res = await fetch(url + 'runs' + params, {
+        headers: { 'authtoken': token },
+    })
     return await res.json()
 }
 
 export const postRun = async (run) => {
     const token = await firebase.auth().currentUser.getIdToken()
-    fetch('http://localhost:5000/api/runs', {
+    fetch(url + 'runs', {
         method: 'POST',
         headers: {
             'authtoken': token,
@@ -50,7 +55,7 @@ export const postRun = async (run) => {
 
 export const postUser = async () => {
     const token = await firebase.auth().currentUser.getIdToken()
-    fetch('http://localhost:5000/api/user', {
+    fetch(url + 'user', {
         method: 'POST',
         headers: {
             'authtoken': token,
