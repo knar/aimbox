@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { postRun } from '../api'
 import Game from '../game/game'
 import './game-wrapper.css'
 
-const GameWrapper = ({ scenario, exitGame }) => {
+const GameWrapper = ({ scenario, exitGame, settings }) => {
     const [showStartPopup, setShowStartPopup] = useState(true)
     const [showFinPopup, setShowFinPopup] = useState(false)
     const [stats, setStats] = useState({})
@@ -11,8 +12,13 @@ const GameWrapper = ({ scenario, exitGame }) => {
     const gameRef = useRef()
 
     useEffect(() => {
-        gameRef.current = new Game({ scenario, canvas: threeCanvasRef.current, hudCanvas: hudCanvasRef.current, fin })
-        gameRef.current.init()
+        gameRef.current = new Game(
+            scenario,
+            threeCanvasRef.current,
+            hudCanvasRef.current,
+            fin,
+            settings
+        )
     }, [])
 
     const start = () => {
@@ -21,7 +27,15 @@ const GameWrapper = ({ scenario, exitGame }) => {
         gameRef.current.start()
     }
 
-    const fin = (stats) => {
+    const fin = (stats, completed = false) => {
+        if (completed) {
+            postRun({
+                scenId: scenario._id,
+                finTime: Date.now(),
+                stats,
+            })
+        }
+
         setStats(stats)
         setShowFinPopup(true)
     }

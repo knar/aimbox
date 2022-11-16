@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Scenarios from './components/scenarios'
 import Runs from './components/runs'
-import Settings from './components/settings'
+import SettingsForm from './components/settings-form'
 import SignIn from './components/sign-in'
 
 const App = () => {
@@ -15,7 +15,7 @@ const App = () => {
     const page = {
         'scenarios': userSignedIn ? <Scenarios /> : null,
         'runs': userSignedIn ? <Runs /> : null,
-        'settings': userSignedIn ? <Settings /> : null,
+        'settings': userSignedIn ? <SettingsForm /> : null,
     }
 
     return (

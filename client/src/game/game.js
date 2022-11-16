@@ -1,5 +1,4 @@
 import { Euler, PerspectiveCamera, Raycaster, WebGLRenderer } from 'three'
-import { getSettings, postRun } from '../api'
 import { drawCrosshair, drawStats } from './hud'
 import { createBotMesh, createScene } from './scene'
 import Sound from './sound'
@@ -17,15 +16,13 @@ export default class Game {
     #renderer
     #frameId
 
-    constructor({ scenario, canvas, hudCanvas, fin }) {
+    constructor(scenario, canvas, hudCanvas, fin, settings) {
         this.#scenario = scenario
         this.#canvas = canvas
         this.#hudCanvas = hudCanvas
         this.#fin = fin
-    }
+        this.#settings = settings
 
-    async init() {
-        this.#settings = await getSettings()
         this.#state = {
             camera: new PerspectiveCamera(),
             scene: createScene(this.#scenario, this.#settings),
@@ -33,9 +30,12 @@ export default class Game {
             isPointerLocked: false,
             stats: {}
         }
-        this.#state.camera.position.setX(this.#scenario.spawn.x)
-        this.#state.camera.position.setY(this.#scenario.spawn.y)
-        this.#state.camera.position.setZ(this.#scenario.spawn.z)
+        this.#state.camera.position.set(
+            this.#scenario.spawn.x,
+            this.#scenario.spawn.y,
+            this.#scenario.spawn.z
+        )
+
         this.#raycaster = new Raycaster()
         this.#hitSound = new Sound('./sounds/perc-808.ogg')
         this.#renderer = new WebGLRenderer({
@@ -74,15 +74,7 @@ export default class Game {
         if (now > this.#state.finTime) {
             drawStats(this.#hudCanvas, this.#state.stats)
             this.#stopLoop()
-
-            this.#fin(this.#state.stats)
-
-            postRun({
-                scenId: this.#scenario._id,
-                finTime: Date.now(),
-                stats: this.#state.stats,
-            })
-
+            this.#fin(this.#state.stats, true)
             return
         }
 
@@ -186,34 +178,30 @@ export default class Game {
                 }
                 this.start()
             }
-        } else if (e.code === 'Escape') {
-            if (!this.#state.isPointerLocked) {
-                this.#stopLoop()
-                this.#fin(this.#state.stats)
-            }
         }
     }
 
     #onPointerLockChange() {
         this.#state.isPointerLocked = (document.pointerLockElement === this.#hudCanvas)
+
+        if (!this.#state.isPointerLocked) {
+            this.#stopLoop()
+            this.#fin(this.#state.stats, false)
+        }
     }
 
     #onWindowResize() {
         const width = window.innerWidth
         const height = window.innerHeight
-        if (this.#canvas.width !== width || this.#canvas.height !== height) {
-            this.#canvas.width = width
-            this.#canvas.height = height
-            this.#hudCanvas.width = width
-            this.#hudCanvas.height = height
-
-            this.#renderer.setSize(width, height)
-            this.#state.camera.aspect = width / height
-            this.#state.camera.fov = scaleFov(this.#settings.fov, height / width)
-            this.#state.camera.updateProjectionMatrix()
-        }
-
-        drawCrosshair(this.#hudCanvas, this.#settings.crosshair)
+        this.#canvas.width = width
+        this.#canvas.height = height
+        this.#hudCanvas.width = width
+        this.#hudCanvas.height = height
+        this.#state.camera.aspect = width / height
+        this.#state.camera.fov = scaleFov(this.#settings.fov, height / width)
+        this.#state.camera.updateProjectionMatrix()
+        this.#renderer.setSize(width, height)
         this.#renderer.render(this.#state.scene, this.#state.camera)
+        drawCrosshair(this.#hudCanvas, this.#settings.crosshair)
     }
 }

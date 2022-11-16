@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { getSettings, postSettings } from '../api'
+import React from 'react'
+import { useSettings } from '../hooks/useSettings'
+import { postSettings } from '../api'
 
-const Settings = () => {
+const SettingsForm = () => {
     const [settings, setSettings] = useSettings()
 
     const handleSave = () => { postSettings(settings) }
@@ -110,30 +111,4 @@ const Settings = () => {
     )
 }
 
-const useSettings = () => {
-    const [settings, setSettings] = useState({
-        sens: 1,
-        fov: 103,
-        wallColor: '#808080',
-        botColor: '#101010',
-        crosshair: {
-            size: 4,
-            width: 2,
-            gap: 0,
-            outlineWidth: 1,
-            color: '#ffe600',
-            outlineColor: '#000000',
-        },
-        displayName: 'Anon',
-    })
-
-    useEffect(() => {
-        (async () => {
-            setSettings({ ...settings, ...(await getSettings()) })
-        })()
-    }, [])
-
-    return [settings, setSettings]
-}
-
-export default Settings
+export default SettingsForm
