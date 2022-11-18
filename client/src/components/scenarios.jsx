@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
-import { useSettings } from '../hooks/useSettings'
 import GameWrapper from './game-wrapper'
 import Runs from './runs'
 import ScenarioPicker from './scenario-picker'
 
-const Scenarios = () => {
+const Scenarios = ({ settings }) => {
     const [pickedScen, setPickedScen] = useState()
-    const [settings, _] = useSettings()
     const [leaderboardScen, setLeaderboardScen] = useState()
 
     const exitGame = () => {

@@ -1,10 +1,7 @@
 import React from 'react'
 import { postSettings } from '../api'
-import { useSettings } from '../hooks/useSettings'
 
-const SettingsForm = () => {
-    const [settings, setSettings] = useSettings()
-
+const SettingsForm = ({ settings, setSettings }) => {
     const handleSave = () => {
         postSettings(settings)
     }

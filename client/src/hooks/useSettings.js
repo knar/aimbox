@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getSettings } from '../api'
 
-export const useSettings = () => {
+export const useSettings = userSignedIn => {
     const [settings, setSettings] = useState({
         sens: 1,
         fov: 103,
@@ -19,10 +19,12 @@ export const useSettings = () => {
     })
 
     useEffect(() => {
-        ;(async () => {
-            setSettings({ ...settings, ...(await getSettings()) })
-        })()
-    }, [])
+        if (userSignedIn) {
+            ;(async () => {
+                setSettings({ ...settings, ...(await getSettings()) })
+            })()
+        }
+    }, [userSignedIn])
 
     return [settings, setSettings]
 }

@@ -3,10 +3,12 @@ import Runs from './components/runs'
 import Scenarios from './components/scenarios'
 import SettingsForm from './components/settings-form'
 import SignIn from './components/sign-in'
+import { useSettings } from './hooks/useSettings'
 
 const App = () => {
     const [userSignedIn, setUserSignedIn] = useState(false)
     const [selectedPage, setSelectedPage] = useState('scenarios')
+    const [settings, setSettings] = useSettings({ userSignedIn })
 
     const onScenarios = () => {
         setSelectedPage('scenarios')
@@ -19,9 +21,11 @@ const App = () => {
     }
 
     const page = {
-        scenarios: userSignedIn ? <Scenarios /> : null,
+        scenarios: userSignedIn ? <Scenarios settings={settings} /> : null,
         runs: userSignedIn ? <Runs title="Your Past Runs" /> : null,
-        settings: userSignedIn ? <SettingsForm /> : null,
+        settings: userSignedIn ? (
+            <SettingsForm settings={settings} setSettings={setSettings} />
+        ) : null,
     }
 
     return (
