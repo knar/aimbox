@@ -28,7 +28,7 @@ export default class Game {
             scene: createScene(this.#scenario, this.#settings),
             bots: [],
             isPointerLocked: false,
-            stats: {}
+            stats: {},
         }
         this.#state.camera.position.set(
             this.#scenario.spawn.x,
@@ -118,7 +118,9 @@ export default class Game {
     #clearBots() {
         for (let i = 0; i < this.#state.bots.length; i++) {
             this.#state.scene.children.splice(
-                this.#state.scene.children.indexOf(this.#state.bots[i]), 1)
+                this.#state.scene.children.indexOf(this.#state.bots[i]),
+                1
+            )
         }
         this.#state.bots = []
     }
@@ -182,7 +184,7 @@ export default class Game {
     }
 
     #onPointerLockChange() {
-        this.#state.isPointerLocked = (document.pointerLockElement === this.#hudCanvas)
+        this.#state.isPointerLocked = document.pointerLockElement === this.#hudCanvas
 
         if (!this.#state.isPointerLocked) {
             this.#stopLoop()

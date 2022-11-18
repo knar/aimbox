@@ -1,6 +1,6 @@
 import express from 'express'
-import authenticate from '../middleware/authenticate.js'
 import { ObjectId } from 'mongodb'
+import authenticate from '../middleware/authenticate.js'
 
 const router = express.Router()
 
@@ -15,8 +15,8 @@ router.get('/scen/:scenId', async (req, res) => {
                 from: 'users',
                 localField: 'uid',
                 foreignField: 'uid',
-                as: 'user'
-            }
+                as: 'user',
+            },
         },
         { $unwind: '$user' },
         { $addFields: { displayName: '$user.settings.displayName' } },
@@ -26,8 +26,8 @@ router.get('/scen/:scenId', async (req, res) => {
                 finTime: true,
                 stats: true,
                 _id: false,
-            }
-        }
+            },
+        },
     ])
 
     if (!runs) {
@@ -48,8 +48,8 @@ router.get('/', authenticate, async (req, res) => {
                 from: 'scenarios',
                 localField: 'scenId',
                 foreignField: '_id',
-                as: 'scenario'
-            }
+                as: 'scenario',
+            },
         },
         { $unwind: '$scenario' },
         { $addFields: { scenarioName: '$scenario.name' } },
@@ -59,8 +59,8 @@ router.get('/', authenticate, async (req, res) => {
                 finTime: true,
                 stats: true,
                 _id: false,
-            }
-        }
+            },
+        },
     ])
 
     if (!runs) {

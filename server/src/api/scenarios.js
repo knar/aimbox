@@ -15,11 +15,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const collection = req.app.locals.db.collection('scenarios')
-    collection.updateOne(
-        { name: req.body.name },
-        { $set: { ...req.body } },
-        { upsert: true }
-    )
+    collection.updateOne({ name: req.body.name }, { $set: { ...req.body } }, { upsert: true })
     res.sendStatus(200)
 })
 

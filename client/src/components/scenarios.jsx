@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import ScenarioPicker from './scenario-picker'
+import { useSettings } from '../hooks/useSettings'
 import GameWrapper from './game-wrapper'
 import Runs from './runs'
-import { useSettings } from '../hooks/useSettings'
+import ScenarioPicker from './scenario-picker'
 
 const Scenarios = () => {
     const [pickedScen, setPickedScen] = useState()
@@ -13,24 +13,19 @@ const Scenarios = () => {
         setPickedScen(undefined)
     }
 
-    const reqParams = () => `/scen/${leaderboardScen._id}`
-
     return (
         <>
-            {pickedScen
-                ? <GameWrapper scenario={pickedScen} exitGame={exitGame} settings={settings} />
-                : <ScenarioPicker
+            {pickedScen ? (
+                <GameWrapper scenario={pickedScen} exitGame={exitGame} settings={settings} />
+            ) : (
+                <ScenarioPicker
                     setPickedScen={setPickedScen}
                     setLeaderboardScen={setLeaderboardScen}
                 />
-            }
-            {leaderboardScen
-                ? <Runs
-                    title={leaderboardScen.name}
-                    reqParams={reqParams()}
-                />
-                : null
-            }
+            )}
+            {leaderboardScen ? (
+                <Runs title={leaderboardScen.name} reqParams={`/scen/${leaderboardScen._id}`} />
+            ) : null}
         </>
     )
 }

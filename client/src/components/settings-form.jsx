@@ -1,11 +1,13 @@
 import React from 'react'
-import { useSettings } from '../hooks/useSettings'
 import { postSettings } from '../api'
+import { useSettings } from '../hooks/useSettings'
 
 const SettingsForm = () => {
     const [settings, setSettings] = useSettings()
 
-    const handleSave = () => { postSettings(settings) }
+    const handleSave = () => {
+        postSettings(settings)
+    }
 
     return (
         <section>
@@ -20,7 +22,12 @@ const SettingsForm = () => {
                     max="5"
                     step="0.1"
                     value={settings.sens}
-                    onChange={e => setSettings({ ...settings, sens: parseFloat(e.target.value) })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            sens: parseFloat(e.target.value),
+                        })
+                    }
                 />
                 <label>Field of View: {settings.fov}</label>
                 <input
@@ -29,7 +36,12 @@ const SettingsForm = () => {
                     max="130"
                     step="1"
                     value={settings.fov}
-                    onChange={e => setSettings({ ...settings, fov: parseInt(e.target.value) })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            fov: parseInt(e.target.value),
+                        })
+                    }
                 />
                 <label>Wall Color: {settings.wallColor}</label>
                 <input
@@ -51,7 +63,15 @@ const SettingsForm = () => {
                     max="15"
                     step="1"
                     value={settings.crosshair.size}
-                    onChange={e => setSettings({ ...settings, crosshair: { ...settings.crosshair, size: parseInt(e.target.value) } })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            crosshair: {
+                                ...settings.crosshair,
+                                size: parseInt(e.target.value),
+                            },
+                        })
+                    }
                 />
 
                 <label>Crosshair Width: {settings.crosshair.width}</label>
@@ -61,7 +81,15 @@ const SettingsForm = () => {
                     max="15"
                     step="1"
                     value={settings.crosshair.width}
-                    onChange={e => setSettings({ ...settings, crosshair: { ...settings.crosshair, width: parseInt(e.target.value) } })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            crosshair: {
+                                ...settings.crosshair,
+                                width: parseInt(e.target.value),
+                            },
+                        })
+                    }
                 />
 
                 <label>Crosshair Gap: {settings.crosshair.gap}</label>
@@ -71,7 +99,15 @@ const SettingsForm = () => {
                     max="15"
                     step="1"
                     value={settings.crosshair.gap}
-                    onChange={e => setSettings({ ...settings, crosshair: { ...settings.crosshair, gap: parseInt(e.target.value) } })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            crosshair: {
+                                ...settings.crosshair,
+                                gap: parseInt(e.target.value),
+                            },
+                        })
+                    }
                 />
 
                 <label>Crosshair Outline Width: {settings.crosshair.outlineWidth}</label>
@@ -81,33 +117,64 @@ const SettingsForm = () => {
                     max="15"
                     step="1"
                     value={settings.crosshair.outlineWidth}
-                    onChange={e => setSettings({ ...settings, crosshair: { ...settings.crosshair, outlineWidth: parseInt(e.target.value) } })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            crosshair: {
+                                ...settings.crosshair,
+                                outlineWidth: parseInt(e.target.value),
+                            },
+                        })
+                    }
                 />
 
                 <label>Crosshair Color: {settings.crosshair.color}</label>
                 <input
                     type="color"
                     value={settings.crosshair.color}
-                    onChange={e => setSettings({ ...settings, crosshair: { ...settings.crosshair, color: e.target.value } })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            crosshair: {
+                                ...settings.crosshair,
+                                color: e.target.value,
+                            },
+                        })
+                    }
                 />
 
                 <label>Crosshair Outline Color: {settings.crosshair.outlineColor}</label>
                 <input
                     type="color"
                     value={settings.crosshair.outlineColor}
-                    onChange={e => setSettings({ ...settings, crosshair: { ...settings.crosshair, outlineColor: e.target.value } })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            crosshair: {
+                                ...settings.crosshair,
+                                outlineColor: e.target.value,
+                            },
+                        })
+                    }
                 />
 
                 <label>Display Name:</label>
                 <input
                     type="text"
                     value={settings.displayName}
-                    onChange={e => setSettings({ ...settings, displayName: e.target.value })}
+                    onChange={e =>
+                        setSettings({
+                            ...settings,
+                            displayName: e.target.value,
+                        })
+                    }
                 />
 
-                <button type="button" onClick={handleSave}>Save</button>
+                <button type="button" onClick={handleSave}>
+                    Save
+                </button>
             </form>
-        </section >
+        </section>
     )
 }
 

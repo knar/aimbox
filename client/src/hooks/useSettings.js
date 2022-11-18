@@ -19,7 +19,7 @@ export const useSettings = () => {
     })
 
     useEffect(() => {
-        (async () => {
+        ;(async () => {
             setSettings({ ...settings, ...(await getSettings()) })
         })()
     }, [])

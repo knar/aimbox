@@ -1,10 +1,10 @@
-import express from 'express'
 import cors from 'cors'
-import db from './db/db.js'
-import userRouter from './api/user.js'
-import settingsRouter from './api/settings.js'
-import scenariosRouter from './api/scenarios.js'
+import express from 'express'
 import runsRouter from './api/runs.js'
+import scenariosRouter from './api/scenarios.js'
+import settingsRouter from './api/settings.js'
+import userRouter from './api/user.js'
+import db from './db/db.js'
 
 const app = express()
 db(process.env.ATLAS_URI, app)

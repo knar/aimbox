@@ -9,9 +9,9 @@ export const clamp = (a, min, max) => {
 
 export const halfpi = Math.PI * 0.5
 
-export const dtor = deg => deg * Math.PI / 180
+export const dtor = deg => (deg * Math.PI) / 180
 
-export const rtod = rad => rad * 180 / Math.PI
+export const rtod = rad => (rad * 180) / Math.PI
 
 export const rand = (min, max) => min + Math.random() * (max - min)
 

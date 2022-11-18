@@ -9,13 +9,17 @@ export default class Sound {
         request.responseType = 'arraybuffer'
 
         request.onload = () => {
-            this.context.decodeAudioData(request.response, (buffer) => {
-                if (!buffer) {
-                    console.log('Error decoding file data: ' + url)
-                    return
-                }
-                this.soundBuffer = buffer
-            }, () => console.log('BufferLoader: XHR error'))
+            this.context.decodeAudioData(
+                request.response,
+                buffer => {
+                    if (!buffer) {
+                        console.log('Error decoding file data: ' + url)
+                        return
+                    }
+                    this.soundBuffer = buffer
+                },
+                () => console.log('BufferLoader: XHR error')
+            )
         }
         request.send()
     }

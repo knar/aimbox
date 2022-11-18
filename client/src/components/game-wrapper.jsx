@@ -45,7 +45,9 @@ const GameWrapper = ({ scenario, exitGame, settings }) => {
             <aside>
                 <h4>{scenario.name}</h4>
                 <p>{scenario.desc}</p>
-                <button type="button" onClick={start}>Start</button>
+                <button type="button" onClick={start}>
+                    Start
+                </button>
             </aside>
         </section>
     )
@@ -57,8 +59,12 @@ const GameWrapper = ({ scenario, exitGame, settings }) => {
                 <p>Scenario: {scenario.name}</p>
                 <p>Hits: {stats.hits}</p>
                 <p>Misses: {stats.misses}</p>
-                <button type="button" onClick={start}>Play Again</button>
-                <button type="button" onClick={exitGame}>Exit</button>
+                <button type="button" onClick={start}>
+                    Play Again
+                </button>
+                <button type="button" onClick={exitGame}>
+                    Exit
+                </button>
             </aside>
         </section>
     )

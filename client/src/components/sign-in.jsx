@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
 import firebase from 'firebase/compat/app'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
-import './sign-in.css'
+import React, { useEffect, useRef } from 'react'
 import { postUser } from '../api'
+import './sign-in.css'
 
 const uiConfig = {
     signInFlow: 'popup',
@@ -17,19 +17,18 @@ const uiConfig = {
 }
 
 const SignIn = ({ userSignedIn, setUserSignedIn }) => {
-    const widgetRef = useRef(null);
+    const widgetRef = useRef(null)
 
     useEffect(() => {
         // https://github.com/firebase/firebaseui-web-react/pull/173#issuecomment-1151532176
         // Get or Create a firebaseUI instance.
-        const firebaseUiWidget = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
-        if (uiConfig.signInFlow === 'popup')
-            firebaseUiWidget.reset()
+        const firebaseUiWidget =
+            firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth())
+        if (uiConfig.signInFlow === 'popup') firebaseUiWidget.reset()
 
         // We track the auth state to reset firebaseUi if the user signs out.
-        const unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
-            if (!user && userSignedIn)
-                firebaseUiWidget.reset()
+        const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
+            if (!user && userSignedIn) firebaseUiWidget.reset()
             setUserSignedIn(!!user)
         })
 
@@ -46,7 +45,6 @@ const SignIn = ({ userSignedIn, setUserSignedIn }) => {
         }
     }, [userSignedIn, firebaseui, uiConfig])
 
-
     if (userSignedIn) {
         return (
             <li>
@@ -57,7 +55,11 @@ const SignIn = ({ userSignedIn, setUserSignedIn }) => {
         return (
             <li>
                 <a href="#">Sign In</a>
-                <ul><li><div className="auth-widget-container" ref={widgetRef} /></li></ul>
+                <ul>
+                    <li>
+                        <div className="auth-widget-container" ref={widgetRef} />
+                    </li>
+                </ul>
             </li>
         )
     }

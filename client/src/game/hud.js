@@ -17,7 +17,7 @@ export const drawCrosshair = (canvas, opts) => {
     if (ow > 0) {
         ctx.strokeStyle = opts.outlineColor
         ctx.lineWidth = opts.width + 2 * ow
-        ctx.beginPath();
+        ctx.beginPath()
         ctx.moveTo(x - gap + ow, y)
         ctx.lineTo(x - gap - ow - size, y)
         ctx.moveTo(x + gap - ow, y)

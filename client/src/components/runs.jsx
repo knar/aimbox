@@ -5,7 +5,7 @@ const Runs = ({ title, reqParams }) => {
     const [runs, setRuns] = useState([])
 
     useEffect(() => {
-        (async () => {
+        ;(async () => {
             const runs = await getRuns(reqParams)
             if (reqParams) {
                 runs.sort((a, b) => a.stats.hits < b.stats.hits)
@@ -16,15 +16,15 @@ const Runs = ({ title, reqParams }) => {
         })()
     }, [reqParams])
 
-    const runsList = runs.map((run, i) =>
+    const runsList = runs.map((run, i) => (
         <tr key={i}>
             {run.scenarioName ? <td>{run.scenarioName}</td> : null}
             {run.displayName ? <td>{run.displayName}</td> : null}
             <td>{run.stats.hits}</td>
             <td>{run.stats.misses}</td>
-            <td>{(new Date(run.finTime)).toLocaleString()}</td>
+            <td>{new Date(run.finTime).toLocaleString()}</td>
         </tr>
-    )
+    ))
 
     return (
         <section>
@@ -33,15 +33,13 @@ const Runs = ({ title, reqParams }) => {
                 <table>
                     <thead>
                         <tr>
-                            <td>{(runs.length > 0 && runs[0].scenarioName) ? 'Scenario' : 'User'}</td>
+                            <td>{runs.length > 0 && runs[0].scenarioName ? 'Scenario' : 'User'}</td>
                             <td>Hits</td>
                             <td>Misses</td>
                             <td>Date</td>
                         </tr>
                     </thead>
-                    <tbody>
-                        {runsList}
-                    </tbody>
+                    <tbody>{runsList}</tbody>
                 </table>
             </header>
         </section>

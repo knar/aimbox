@@ -5,7 +5,8 @@ initializeApp({ credential: applicationDefault() })
 
 const authenticate = async (req, res, next) => {
     try {
-        const firebaseUser = req.headers.authtoken && await getAuth().verifyIdToken(req.headers.authtoken)
+        const firebaseUser =
+            req.headers.authtoken && (await getAuth().verifyIdToken(req.headers.authtoken))
         if (!firebaseUser) {
             return res.sendStatus(401)
         }
