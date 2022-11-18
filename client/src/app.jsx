@@ -8,7 +8,7 @@ import { useSettings } from './hooks/useSettings'
 const App = () => {
     const [userSignedIn, setUserSignedIn] = useState(false)
     const [selectedPage, setSelectedPage] = useState('scenarios')
-    const [settings, setSettings] = useSettings({ userSignedIn })
+    const [settings, setSettings] = useSettings(userSignedIn)
 
     const onScenarios = () => {
         setSelectedPage('scenarios')
